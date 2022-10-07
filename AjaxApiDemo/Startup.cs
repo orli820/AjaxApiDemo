@@ -28,6 +28,14 @@ namespace AjaxApiDemo
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddCors(options =>
+            {
+                options.AddDefaultPolicy(builder =>
+                {
+                    builder.WithOrigins("*").AllowAnyHeader().AllowAnyMethod();
+                });
+            });
+            
             services.AddDbContext<NorthwindContext>(options =>
             {
                 options.UseSqlServer(Configuration.GetConnectionString("NorthwindConnection"));
@@ -52,6 +60,8 @@ namespace AjaxApiDemo
             }
 
             app.UseHttpsRedirection();
+
+            app.UseCors();//注意位置，不能再UseEndpoints後
 
             app.UseRouting();
 
